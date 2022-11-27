@@ -1,8 +1,7 @@
 import telebot
+from decouple import config
 
-TOKEN = "5426919180:AAEyGzMQfGSjBwFZglCX04mm7jiuM9R_1Vg"
-
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(config('TOKEN'))
 
 cupons = []
 
