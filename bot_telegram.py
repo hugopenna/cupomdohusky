@@ -3,7 +3,8 @@ from decouple import config
 
 bot = telebot.TeleBot(config('TOKEN'))
 
-cupons = []
+cupons = ['3E6069E696E0', '98F39F533804', '350C916DCDBD', '2848E8066314', '203F63E1786C', '5B6CB05A2D08']
+
 
 @bot.message_handler(commands=["take"])
 def cmd_take(message):
@@ -11,9 +12,11 @@ def cmd_take(message):
         msg = "Opa, parece que nao temos nenhum cupom no momento."
     else:
         msg = """Pega esse cupom ae!
-{}""".format(cupons[0])
+{}""".format(cupons.pop(0))
 
     bot.send_message(message.chat.id, msg)
+    print(cupons)
+
 
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
@@ -27,6 +30,7 @@ def save_cupom(message):
     print(cupons)
     bot.send_message(message.chat.id, """seu cupom foi salvo com sucesso, 
 obrigado :)""")
+
 
 @bot.message_handler(func=lambda m: True)
 def text(message):
