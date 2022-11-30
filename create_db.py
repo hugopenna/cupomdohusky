@@ -11,6 +11,6 @@ cur.execute("""CREATE TABLE cupons (
     taken_date TEXT DEFAULT NULL
     );""")
 
-cur.execute("""INSERT INTO cupons VALUES 
-(cupom_id='236F06462E95', given_by='Hugopenna')
+cur.execute("""INSERT INTO cupons (cupom_id, given_by) VALUES 
+('236F06462E95', 'Hugopenna');
 """)
