@@ -14,3 +14,4 @@ cur.execute("""CREATE TABLE cupons (
 cur.execute("""INSERT INTO cupons (cupom_id, given_by) VALUES 
 ('236F06462E95', 'Hugopenna');
 """)
+con.commit()
