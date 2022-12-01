@@ -10,8 +10,3 @@ cur.execute("""CREATE TABLE cupons (
     taken_by TEXT DEFAULT NULL,
     taken_date TEXT DEFAULT NULL
     );""")
-
-cur.execute("""INSERT INTO cupons (cupom_id, given_by) VALUES 
-('236F06462E95', 'Hugopenna');
-""")
-con.commit()

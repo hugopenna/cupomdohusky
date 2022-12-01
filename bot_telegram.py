@@ -1,23 +1,28 @@
 import telebot
 from decouple import config
+import sqlite3
 
 bot = telebot.TeleBot(config('TOKEN'))
-
-cupons = ['30C37F3016B8', 'AB8015E7FC32', '11236EDF4236', 'FFC0A68DC165', '0A13A68C0291', 'DFAA143C409F',
-          '2F95F410E869', '236F06462E95', 'D4D79B0593A3']
 
 
 @bot.message_handler(commands=["take"])
 def cmd_take(message):
-    if cupons == []:
-        msg = "Opa, parece que nao temos nenhum cupom no momento."
-    else:
+    con = sqlite3.connect('main.db')
+    cur = con.cursor()
+    res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
+    cupom = res.fetchone()
+
+    if None != cupom:
         msg = """Pega esse cupom ae!
-{}""".format(cupons.pop(0))
+{}""".format(cupom[0])
+        cur.execute("UPDATE cupons SET taken_by=? WHERE cupom_id=?;", (message.from_user.id, cupom[0]))
+        con.commit()
+    else:
+        msg = "Opa, parece que nao temos nenhum cupom no momento."
 
     bot.send_message(message.chat.id, msg)
+    print(msg)
     print(message)
-    print(cupons)
 
 
 @bot.message_handler(commands=["give"])
@@ -28,11 +33,19 @@ def cmd_give(message):
 
 
 def save_cupom(message):
-    cupons.append(message.text)
-    print(cupons)
-    bot.send_message(message.chat.id, """seu cupom foi salvo com sucesso, 
-obrigado :)""")
+    if len(message.text) != 12:
+        msg = 'Eita, parece que isso não é um cupom.'
+    else:
+        msg = """seu cupom foi salvo com sucesso,
+obrigado :)"""
 
+        con = sqlite3.connect('main.db')
+        cur = con.cursor()
+        cur.execute("INSERT INTO cupons (cupom_id, given_by) VALUES (?,?);", (message.text, message.from_user.id))
+        con.commit()
+
+    bot.send_message(message.chat.id, msg)
+    print(msg)
 
 @bot.message_handler(func=lambda m: True)
 def text(message):
