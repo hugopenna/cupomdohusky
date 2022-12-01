@@ -3,7 +3,8 @@ from decouple import config
 
 bot = telebot.TeleBot(config('TOKEN'))
 
-cupons = ['3E6069E696E0', '98F39F533804', '350C916DCDBD', '2848E8066314', '203F63E1786C', '5B6CB05A2D08']
+cupons = ['30C37F3016B8', 'AB8015E7FC32', '11236EDF4236', 'FFC0A68DC165', '0A13A68C0291', 'DFAA143C409F',
+          '2F95F410E869', '236F06462E95', 'D4D79B0593A3']
 
 
 @bot.message_handler(commands=["take"])
@@ -15,6 +16,7 @@ def cmd_take(message):
 {}""".format(cupons.pop(0))
 
     bot.send_message(message.chat.id, msg)
+    print(message)
     print(cupons)
 
 
