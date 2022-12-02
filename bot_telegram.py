@@ -38,14 +38,13 @@ def cmd_take(message):
     cupom = res.fetchone()
 
     if None != cupom:
-        msg = """Pega esse cupom ae!
-{}""".format(cupom[0])
+        msg = ["Pega esse cupom ae!", cupom[0]]
         cur.execute("UPDATE cupons SET taken_by=? WHERE cupom_id=?;", (message.from_user.id, cupom[0]))
         con.commit()
     else:
-        msg = "Opa, parece que nao temos nenhum cupom no momento."
-
-    bot.send_message(message.chat.id, msg)
+        msg = ["Opa, parece que nao temos nenhum cupom no momento."]
+    for i in msg:
+        bot.send_message(message.chat.id, i)
     cmd_apoiar(message)
     print(message)
     print(msg)
@@ -53,12 +52,12 @@ def cmd_take(message):
 
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
-    msg ="""Tem sido divertido fazer esse bot, 
-se te ajudei de alguma forma, considere me apoiar.
+    msg =["""Tem sido divertido fazer esse bot.
+se te ajudei de alguma forma, considere me apoiar :)
 
-CHAVE PIX:
-26f2cc7b-5c72-4319-a0f6-a75ddbdf0dc3"""
-    bot.send_message(message.chat.id, msg)
+CHAVE PIX:""", "26f2cc7b-5c72-4319-a0f6-a75ddbdf0dc3"]
+    for i in msg:
+        bot.send_message(message.chat.id, i)
 
 @bot.message_handler(func=lambda m: True)
 def text(message):
