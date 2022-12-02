@@ -1,8 +1,12 @@
+import sqlite3
+from datetime import date
+
 import telebot
 from decouple import config
-import sqlite3
 
 bot = telebot.TeleBot(config('TOKEN'))
+#bot = telebot.TeleBot('251487216:AAFZhGaBS_KEGLABlbyFeOVGzClIeSXQTRo')
+DB = 'main.db'
 
 
 @bot.message_handler(commands=["give"])
@@ -19,9 +23,10 @@ def save_cupom(message):
         msg = """seu cupom foi salvo com sucesso,
 obrigado :)"""
 
-        con = sqlite3.connect('main.db')
+        con = sqlite3.connect(DB)
         cur = con.cursor()
-        cur.execute("INSERT INTO cupons (cupom_id, given_by) VALUES (?,?);", (message.text, message.from_user.id))
+        cur.execute("INSERT INTO cupons (cupom_id, given_by, given_date) VALUES (?,?,?);",
+                    (message.text, message.from_user.id, date.today()))
         con.commit()
 
     bot.send_message(message.chat.id, msg)
@@ -32,14 +37,15 @@ obrigado :)"""
 
 @bot.message_handler(commands=["take"])
 def cmd_take(message):
-    con = sqlite3.connect('main.db')
+    con = sqlite3.connect(DB)
     cur = con.cursor()
     res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
     cupom = res.fetchone()
 
     if None != cupom:
         msg = ["Pega esse cupom ae!", cupom[0]]
-        cur.execute("UPDATE cupons SET taken_by=? WHERE cupom_id=?;", (message.from_user.id, cupom[0]))
+        cur.execute("UPDATE cupons SET taken_by=? , taken_date=? WHERE cupom_id=?;",
+                    (message.from_user.id, date.today(), cupom[0]))
         con.commit()
     else:
         msg = ["Opa, parece que nao temos nenhum cupom no momento."]
