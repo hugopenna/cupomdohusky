@@ -79,14 +79,17 @@ def cmd_apoiar(message):
 @bot.message_handler(func=lambda m: True)
 def text(message):
     welcome_msg = """
-    Bot para oferecer e pegar cupom do Husky.io
-    Para comecar escolha um comando:
-        /give - se quiser fornecer um cupom
-        /take - se estiver precisando de um cupom
-        /apoiar - para apoiar o desenvolvimento desse bot
-        
-    se precisar de ajuda chama o @hugopenna
-    """
+Bot para pegar e fornecer cupom do Husky.io
+
+Para comecar escolha um comando:
+    /give - para deixar um cupom
+    /take - para pegar um cupom
+    /apoiar - para apoiar o desenvolvimento
+
+Os cupons não são meus e nem infinitos, caso vc esteja só testando, por favor, mande o cupom de volta com /give
+    
+Dúvidas, comentários e sugestões, chama o @hugopenna
+"""
     bot.reply_to(message, welcome_msg)
 
 
