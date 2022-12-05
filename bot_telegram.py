@@ -6,11 +6,20 @@ from decouple import config
 
 bot = telebot.TeleBot(config('TOKEN'))
 DB = 'main.db'
-MSG_APOIO = ["""Tem sido divertido fazer esse bot.
+MSG_APOIO = ["""
+Tem sido divertido fazer esse bot.
 Se te ajudei de alguma forma, 
-considere me apoiar :)
+deixe um café pra mim :)
 
 CHAVE PIX:""", "26f2cc7b-5c72-4319-a0f6-a75ddbdf0dc3"]
+DISCLAIMER = """
+[Informação importante]
+
+Os cupons que o bot compartilha são de outros usuários.
+
+Se você não estiver precisando de um agora, mande-o de volta com /give
+
+Se te ajudou, considere me /apoiar"""
 
 
 @bot.message_handler(commands=["give"])
@@ -55,7 +64,7 @@ def cmd_take(message):
         cupom = res.fetchone()
 
         if cupom is not None:
-            msg = ["Pega esse cupom ae!", cupom[0], MSG_APOIO[0], MSG_APOIO[1]]
+            msg = ["Pega esse cupom ae!", cupom[0], DISCLAIMER]
             cur.execute("UPDATE cupons SET taken_by=? , taken_date=? WHERE cupom_id=?;",
                         (message.from_user.id, datetime.date.today(), cupom[0]))
             con.commit()
@@ -86,7 +95,7 @@ Para comecar escolha um comando:
     /take - para pegar um cupom
     /apoiar - para apoiar o desenvolvimento
 
-Os cupons não são meus e nem infinitos, caso vc esteja só testando, por favor, mande o cupom de volta com /give
+Os cupons não são meus e nem infinitos, caso vc esteja só testando, mande o cupom de volta com /give
     
 Dúvidas, comentários e sugestões, chama o @hugopenna
 """
