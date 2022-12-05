@@ -24,6 +24,8 @@ Se te ajudou, considere me /apoiar"""
 
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
+    if message.from_user.id != message.chat.id:
+        bot.send_message(message.chat.id, "te chamei no pvt ;)")
     print(message)
     msg = bot.send_message(message.from_user.id, "mande seu cupom")
     bot.register_next_step_handler(msg, save_cupom)
