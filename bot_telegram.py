@@ -25,7 +25,7 @@ Se te ajudou, considere me /apoiar"""
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
     print(message)
-    msg = bot.send_message(message.chat.id, "mande seu cupom")
+    msg = bot.send_message(message.from_user.id, "mande seu cupom")
     bot.register_next_step_handler(msg, save_cupom)
 
 
@@ -72,7 +72,7 @@ def cmd_take(message):
             msg = ["Opa, parece que nao temos nenhum cupom no momento."]
 
     for i in msg:
-        bot.send_message(message.chat.id, i)
+        bot.send_message(message.from_user.id, i)
     print(message)
     print(msg)
 
@@ -82,7 +82,7 @@ def cmd_apoiar(message):
     msg = MSG_APOIO
 
     for i in msg:
-        bot.send_message(message.chat.id, i)
+        bot.send_message(message.from_user.id, i)
 
 
 @bot.message_handler(func=lambda m: True)
