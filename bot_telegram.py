@@ -6,7 +6,7 @@ from decouple import config
 import utils.msg as msg
 
 bot = telebot.TeleBot(config('TOKEN'))
-DB = 'test.db'
+DB = config('DB')
 
 
 @bot.message_handler(commands=["give"])
@@ -59,6 +59,7 @@ def cmd_take(message):
 
     for i in aux:
         bot.send_message(message.from_user.id, i, parse_mode='markdownV2')
+
     print(message)
     print(aux)
 
