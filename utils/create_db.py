@@ -1,7 +1,7 @@
 import sqlite3
 
 
-con = sqlite3.connect("main.db")
+con = sqlite3.connect("test.db")
 cur = con.cursor()
 cur.execute("""CREATE TABLE cupons (
     cupom_id TEXT NOT NULL,
