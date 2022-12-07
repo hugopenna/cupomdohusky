@@ -3,6 +3,8 @@ import sqlite3
 
 import telebot
 from decouple import config
+from telebot import types
+
 import utils.msg as msg
 
 bot = telebot.TeleBot(config('TOKEN'))
@@ -36,29 +38,38 @@ def save_cupom(message):
 
 @bot.message_handler(commands=["take"])
 def cmd_take(message):
-    prazo = datetime.date.today() - datetime.timedelta(days=30)
+    aux = []
+    if message.chat.id < 0:
+        button = types.InlineKeyboardMarkup()
+        btn = types.InlineKeyboardButton(msg.btn_take,
+                                         url=f'https://t.me/jamesbbot?start=take')
+        button.add(btn, btn, row_width=1)
+        bot.reply_to(message, msg.take_cupom, parse_mode='HTML', reply_markup=button)
 
-    con = sqlite3.connect(DB)
-    cur = con.cursor()
-    taker_valid = cur.execute("SELECT * from cupons WHERE taken_by=? AND taken_date>? ;", (message.from_user.id, prazo))
-    taker_valid = taker_valid.fetchall()
-
-    if len(taker_valid) >= 3:
-        aux = [msg.too_many_cupom]
     else:
-        res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
-        cupom = res.fetchone()
+        prazo = datetime.date.today() - datetime.timedelta(days=30)
 
-        if cupom is not None:
-            aux = [msg.take_cupom, cupom[0], msg.disclaimer]
-            cur.execute("UPDATE cupons SET taken_by=? , taken_date=? WHERE cupom_id=?;",
-                        (message.from_user.id, datetime.date.today(), cupom[0]))
-            con.commit()
+        con = sqlite3.connect(DB)
+        cur = con.cursor()
+        taker_valid = cur.execute("SELECT * from cupons WHERE taken_by=? AND taken_date>? ;", (message.from_user.id, prazo))
+        taker_valid = taker_valid.fetchall()
+
+        if len(taker_valid) >= 3:
+            aux = [msg.too_many_cupom]
         else:
-            aux = [msg.without_cupom]
+            res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
+            cupom = res.fetchone()
 
-    for i in aux:
-        bot.send_message(message.from_user.id, i, parse_mode='markdownV2')
+            if cupom is not None:
+                aux = [msg.take_cupom, cupom[0], msg.disclaimer]
+                cur.execute("UPDATE cupons SET taken_by=? , taken_date=? WHERE cupom_id=?;",
+                            (message.from_user.id, datetime.date.today(), cupom[0]))
+                con.commit()
+            else:
+                aux = [msg.without_cupom]
+
+        for i in aux:
+            bot.send_message(message.from_user.id, i, parse_mode='markdownV2')
 
     print(message)
     print(aux)
@@ -66,13 +77,21 @@ def cmd_take(message):
 
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
+    button = types.InlineKeyboardMarkup()
+    btn = types.InlineKeyboardButton(msg.btn_take,
+                                     callback_data='/take')
+    button.add(btn, btn, row_width=1)
     bot.send_message(message.from_user.id, msg.apoio,
-                     parse_mode='markdownV2')
+                     parse_mode='markdownV2', reply_markup=button)
 
 
 @bot.message_handler(func=lambda m: True)
 def text(message):
-    bot.reply_to(message, msg.welcome, parse_mode='markdownV2')
+    if 'take' in message.text:
+        cmd_take(message)
+    else:
+        bot.reply_to(message, msg.welcome, parse_mode='markdownV2')
+    print(message)
 
 
 bot.polling()
