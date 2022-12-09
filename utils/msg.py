@@ -13,10 +13,10 @@ take_cupom = "Pega esse cupom ae\!"
 btn_take = "Pegar cupom"
 
 welcome = """Bot para pegar e fornecer cupom do Husky\.io\n
-Para comecar escolha um comando\:
-    /give \- para deixar um cupom
-    /take \- para pegar um cupom
-    /apoiar \- para apoiar o desenvolvimento\n
+Aqui voce pode\:
+\- pegar um cupom
+\- deixar seu cupom para usarem
+\- /apoiar o desenvolvimento\n
 Os cupons não são meus e nem infinitos, caso vc esteja só testando\, mande o cupom de volta com /give\n
 Dúvidas\, comentários e sugestões\, chama o @hugopenna
 """
