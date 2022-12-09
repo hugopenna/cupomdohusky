@@ -23,21 +23,23 @@ def cmd_give(message):
 
 
 def save_cupom(message):
-    if len(message.text) != 12:
-        aux = [msg.not_cupom]
-    else:
-        aux = [msg.saved_cupom]
+    print(message)
 
+    if len(message.text) != 12:
+        bot.send_message(message.chat.id, msg.not_cupom, parse_mode='markdownV2')
+        cmd_give(message)
+        print(msg.not_cupom)
+    else:
         con = sqlite3.connect(DB)
         cur = con.cursor()
         cur.execute("INSERT INTO cupons (cupom_id, given_by, given_date) VALUES (?,?,?);",
                     (message.text, message.from_user.id, datetime.date.today()))
         con.commit()
 
-    for i in aux:
-        bot.send_message(message.chat.id, i, parse_mode='markdownV2')
-    print(message)
-    print(aux)
+        bot.send_message(message.chat.id, msg.saved_cupom, parse_mode='markdownV2')
+        print(msg.saved_cupom)
+
+
 
 
 @bot.callback_query_handler(func=lambda q: q.data == 'take')
