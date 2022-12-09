@@ -4,6 +4,7 @@ import sqlite3
 import telebot
 from decouple import config
 from telebot import types
+from telebot.util import quick_markup
 
 import utils.msg as msg
 
@@ -83,12 +84,10 @@ def send_cupom(message):
 
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
-    button = types.InlineKeyboardMarkup()
-    btn = types.InlineKeyboardButton(msg.btn_take,
-                                     callback_data='take')
-    button.add(btn, btn, row_width=1)
+    markup = quick_markup({'Pegar Cupom': {'callback_data': 'take'}, 'Pegar2': {'callback_data': 'take'}},
+                          row_width=1)
     bot.send_message(message.from_user.id, msg.apoio,
-                     parse_mode='markdownV2', reply_markup=button)
+                     parse_mode='HTML', reply_markup=markup)
 
 
 @bot.message_handler(func=lambda m: True)
