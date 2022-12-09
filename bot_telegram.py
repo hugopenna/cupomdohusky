@@ -11,6 +11,9 @@ import utils.msg as msg
 bot = telebot.TeleBot(config('TOKEN'))
 DB = config('DB')
 
+@bot.callback_query_handler(func=lambda q: q.data == 'give')
+def qry_take(query):
+    cmd_give(query)
 
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
@@ -84,18 +87,22 @@ def send_cupom(message):
 
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
-    markup = quick_markup({'Pegar Cupom': {'callback_data': 'take'}, 'Pegar2': {'callback_data': 'take'}},
-                          row_width=1)
     bot.send_message(message.from_user.id, msg.apoio,
-                     parse_mode='HTML', reply_markup=markup)
+                     parse_mode='HTML')
 
 
 @bot.message_handler(func=lambda m: True)
 def text(message):
+
     if 'take' in message.text:
         send_cupom(message)
+    elif 'give' in message.text:
+        cmd_give(message)
+
     else:
-        bot.reply_to(message, msg.welcome, parse_mode='markdownV2')
+        markup = quick_markup({'Pegar Cupom': {'callback_data': 'take'}, 'Deixar cupom': {'callback_data': 'give'}},
+                              row_width=1)
+        bot.reply_to(message, msg.welcome, parse_mode='markdownV2', reply_markup=markup)
     print(message)
 
 
