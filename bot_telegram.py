@@ -108,4 +108,4 @@ def text(message):
     print(message)
 
 
-bot.polling()
+bot.infinity_polling()
