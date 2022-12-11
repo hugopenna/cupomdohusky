@@ -13,11 +13,20 @@ DB = config('DB')
 
 @bot.callback_query_handler(func=lambda q: q.data == 'give')
 def qry_take(query):
-    cmd_give(query)
+    give_handler(query)
 
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
-    print(message)
+    if message.chat.id < 0:
+        button = types.InlineKeyboardMarkup()
+        btn = types.InlineKeyboardButton(msg.btn_give,
+                                         url=f'https://t.me/jamesbbot?start=give')
+        button.add(btn, row_width=1)
+        bot.reply_to(message, msg.give_cupom_grp, parse_mode='HTML', reply_markup=button)
+    else:
+        give_handler(message)
+
+def give_handler(message):
     aux = bot.send_message(message.from_user.id, msg.send_cupom, parse_mode='markdownV2')
     bot.register_next_step_handler(aux, save_cupom)
 
@@ -49,11 +58,12 @@ def qry_take(query):
 
 @bot.message_handler(commands=["take"])
 def cmd_take(message):
+    print(message)
     if message.chat.id < 0:
         button = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(msg.btn_take,
                                          url=f'https://t.me/jamesbbot?start=take')
-        button.add(btn, btn, row_width=1)
+        button.add(btn, row_width=1)
         bot.reply_to(message, msg.take_cupom, parse_mode='HTML', reply_markup=button)
     else:
         send_cupom(message)

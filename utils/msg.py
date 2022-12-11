@@ -9,8 +9,10 @@ without_cupom = "Opa\, parece que nao temos nenhum cupom no momento\."
 send_cupom = "Mande seu cupom\."
 
 take_cupom = "Pega esse cupom ae\!"
+give_cupom_grp = "Clique abaixo para deixar seu cupom"
 
 btn_take = "Pegar cupom"
+btn_give = "Deixar cupom"
 
 welcome = """Bot para pegar e fornecer cupom do Husky\.io\n
 Aqui voce pode\:
