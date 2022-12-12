@@ -69,14 +69,14 @@ def cmd_take(message):
         send_cupom(message)
 
 def send_cupom(message):
-    prazo = datetime.date.today() - datetime.timedelta(days=30)
+    prazo = datetime.date.today() - datetime.timedelta(days=7)
 
     con = sqlite3.connect(DB)
     cur = con.cursor()
     taker_valid = cur.execute("SELECT * from cupons WHERE taken_by=? AND taken_date>? ;", (message.from_user.id, prazo))
     taker_valid = taker_valid.fetchall()
 
-    if len(taker_valid) >= 3:
+    if len(taker_valid) >= 2:
         aux = [msg.too_many_cupom]
     else:
         res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
