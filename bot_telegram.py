@@ -100,7 +100,7 @@ def send_cupom(message):
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
     bot.send_message(message.from_user.id, msg.apoio,
-                     parse_mode='HTML')
+                     parse_mode='markdownV2')
 
 
 @bot.message_handler(func=lambda m: True)

@@ -1,6 +1,6 @@
 not_cupom = 'Eita\, parece que isso não é um cupom\.'
 
-saved_cupom = """seu cupom foi salvo com sucesso\,\n obrigado \:\)"""
+saved_cupom = """seu cupom foi salvo com sucesso\.\n\nse o bot te ajudou de alguma forma\, considere me /apoiar\n\nobrigado \:\)"""
 
 too_many_cupom = "Parece que vc já pegou cupons recentemente\, vamos deixar para os outros amiguinhos também\."
 
