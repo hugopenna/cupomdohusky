@@ -17,6 +17,7 @@ def qry_take(query):
 
 @bot.message_handler(commands=["give"])
 def cmd_give(message):
+    print(message)
     if message.chat.id < 0:
         button = types.InlineKeyboardMarkup()
         btn = types.InlineKeyboardButton(msg.btn_give,
