@@ -26,6 +26,8 @@ Dúvidas\, comentários e sugestões\, chama o @hugopenna
 apoio = """Tem sido divertido fazer esse bot\.\nSe te ajudei de alguma forma,\ndeixe um café pra mim \:\)\n
 CHAVE PIX: \n`26f2cc7b-5c72-4319-a0f6-a75ddbdf0dc3`"""
 
-disclaimer = """*Informação importante* \n\nOs cupons que o bot compartilha são de outros usuários\.\n
-Se você não estiver precisando de um agora\, mande\-o de volta com /give\n
+disclaimer = """*Informação importante* \n
+Os cupons são de outros usuários e são de uso único\.\n
+*Só aplique se for receber\.*\n
+Se você não estiver precisando de um agora\, mande\-o de volta com /give\.\n
 Se te ajudou\, considere me /apoiar"""
