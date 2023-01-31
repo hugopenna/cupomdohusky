@@ -97,10 +97,12 @@ def send_cupom(message):
     print(message)
     print(aux)
 
+
 @bot.message_handler(commands=["stats"])
 def cmd_stats(message):
 #    cur.execute(WIP)
 print("estamos trabalhando nisso")
+
 
 @bot.message_handler(commands=["apoiar"])
 def cmd_apoiar(message):
