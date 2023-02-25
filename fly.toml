@@ -2,7 +2,7 @@
 
 app = "cupom-husky"
 kill_signal = "SIGINT"
-kill_timeout = 5
+kill_timeout = 300
 processes = []
 
 [build]
@@ -10,6 +10,10 @@ processes = []
 
 [env]
   PORT = "8080"
+
+[processes]
+worker = "python bot_telegram.py"
+
 
 [experimental]
   auto_rollback = true
