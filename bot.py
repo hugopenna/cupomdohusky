@@ -1,5 +1,6 @@
-import datetime
-import sqlite3
+
+# import datetime
+# import sqlite3
 
 import telebot
 from decouple import config
@@ -9,7 +10,9 @@ from telebot.util import quick_markup
 import utils.msg as msg
 
 bot = telebot.TeleBot(config('TOKEN'))
-DB = config('DB')
+# DB = config('DB')
+cupons = []
+
 
 @bot.callback_query_handler(func=lambda q: q.data == 'give')
 def qry_take(query):
@@ -40,12 +43,7 @@ def save_cupom(message):
         cmd_give(message)
         print(msg.not_cupom)
     else:
-        con = sqlite3.connect(DB)
-        cur = con.cursor()
-        cur.execute("INSERT INTO cupons (cupom_id, given_by, given_date) VALUES (?,?,?);",
-                    (message.text, message.from_user.id, datetime.date.today()))
-        con.commit()
-
+        cupons.append(message.text)
         bot.send_message(message.chat.id, msg.saved_cupom, parse_mode='markdownV2')
         print(msg.saved_cupom)
 
@@ -70,26 +68,11 @@ def cmd_take(message):
         send_cupom(message)
 
 def send_cupom(message):
-    prazo = datetime.date.today() - datetime.timedelta(days=7)
-
-    con = sqlite3.connect(DB)
-    cur = con.cursor()
-    taker_valid = cur.execute("SELECT * from cupons WHERE taken_by=? AND taken_date>? ;", (message.from_user.id, prazo))
-    taker_valid = taker_valid.fetchall()
-
-    if len(taker_valid) >= 2:
-        aux = [msg.too_many_cupom]
+    if len(cupons) != 0:
+        aux = [msg.take_cupom, cupons[0], msg.disclaimer]
+        cupons.pop(0)
     else:
-        res = cur.execute("SELECT cupom_id FROM cupons WHERE taken_by IS NULL;")
-        cupom = res.fetchone()
-
-        if cupom is not None:
-            aux = [msg.take_cupom, cupom[0], msg.disclaimer]
-            cur.execute("UPDATE cupons SET taken_by=? , taken_date=? WHERE cupom_id=?;",
-                        (message.from_user.id, datetime.date.today(), cupom[0]))
-            con.commit()
-        else:
-            aux = [msg.without_cupom]
+        aux = [msg.without_cupom]
 
     for i in aux:
         bot.send_message(message.from_user.id, i, parse_mode='markdownV2')
@@ -100,8 +83,9 @@ def send_cupom(message):
 
 @bot.message_handler(commands=["stats"])
 def cmd_stats(message):
-#    cur.execute(WIP)
-print("estamos trabalhando nisso")
+
+    msg = "estamos trabalhando nisso"
+    bot.send_message(message.from_user.id, msg)
 
 
 @bot.message_handler(commands=["apoiar"])
