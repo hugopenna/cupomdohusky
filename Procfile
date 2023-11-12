@@ -1,2 +1,2 @@
-# Modify this Procfile to fit your needs
-worker: gunicorn bot_telegram:app
+# TODO: Modify this Procfile to fit your needs
+web: gunicorn bot:app
